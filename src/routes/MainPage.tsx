@@ -9,6 +9,15 @@ export const MainPage = () => {
     const [sortProp, setSortProp] = useState<keyof Product>("name");
     const [isDesc, setDesc] = useState<boolean>(false);
 
+    function deleteProduct(id: number): void {
+        fetch(`https://test.tspb.su/test-task/vehicles/${id}`, {
+            method: "DELETE",
+        }).then(res => {if (res.ok) alert("Успешно")}).catch(err => console.error(err));
+
+        if (confirm("Are you absolutely shure?"))
+            setProducts(products.filter((prod) => prod.id !== id));
+    }
+
     const sortCallback = (prod1: Product, prod2: Product): number => {
         return prod1[sortProp] > prod2[sortProp] ? 1 : prod1[sortProp] < prod2[sortProp] ? -1 : 0;
     }
@@ -36,7 +45,7 @@ export const MainPage = () => {
     if (isError) return <h2>Error</h2>;
     if (isLoading) return <h2>Loading...</h2>;
 
-    const sorted = products.sort(sortCallback).map(prod => <ProductCard prod={prod} key={prod.id} />);
+    const sorted = products.sort(sortCallback).map(prod => <ProductCard onDelete={deleteProduct} prod={prod} key={prod.id} />);
 
     return (
         <div className="flex flex-col gap-2">

@@ -3,6 +3,8 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerHeader, Dr
 import { YMapLocation } from "@yandex/ymaps3-types/imperative/YMap"
 import { Suspense, useState } from "react"
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog"
+import { useMediaQuery } from "usehooks-ts"
+import { Edit, Trash } from "lucide-react"
 
 export type Product = {
     id: number,
@@ -15,12 +17,17 @@ export type Product = {
     longitude: number,
 }
 
-export type ProductForm = Omit<Product, "id" | "longtitude" | "latitude">
+export type ProductForm = Omit<Product, "id" | "longtitude" | "latitude">;
 
-export const ProductCard = ({ prod }: { prod: Product }) => {
+export const ProductCard = ({ prod, onDelete }: { prod: Product, onDelete: Function }) => {
     const pointLocation: YMapLocation = { center: [prod.longitude, prod.latitude], zoom: 9 };
     const [productData, setProductData] = useState<Product>();
-return <Drawer>
+    const [isOpen, setOpen] = useState(false);
+
+    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const isAdmin = true;
+
+    if (!isDesktop) return <Drawer open={isOpen} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
             <div className="flex flex-col max-w-64 w-full rounded max-sm:max-w-full">
                 <img alt={prod.name} src={"src/assets/placeholder-green.png"} className="w-full h-64 bg-gray-100 object-cover" />
@@ -34,7 +41,10 @@ return <Drawer>
         <DrawerContent className="!max-h-full mt-8 overflow-hidden px-0">
             <div className="overflow-y-scroll max-h-screen">
                 <DrawerHeader className="font-semibold text-2xl">{prod.name}</DrawerHeader>
-                <div className="px-4 pb-2">edit</div>
+                {isAdmin && <div className="px-4 py-2 flex flex-row gap-2">
+                    <button><Edit color="gray" className="hover:bg-gray-50 rounded" onClick={()=> onDelete(prod.id)}/></button>
+                    <button><Trash color="gray" className="hover:bg-gray-50 rounded" onClick={()=> onDelete(prod.id)}/></button>
+                </div>}
                 <img alt={prod.name} src={"src/assets/placeholder-green.png"} className="w-full h-64 bg-gray-100 object-cover" />
                 <div className="w-full h-64 bg-gray-100 object-cover">
                     <Suspense fallback={<div>Map is loading...</div>}>
@@ -60,7 +70,7 @@ return <Drawer>
         </DrawerContent>
     </Drawer>;
 
-    return <Dialog>
+    return <Dialog open={isOpen} onOpenChange={setOpen}>
         <DialogTrigger asChild>
             <div className="flex flex-col max-w-64 w-full rounded max-sm:max-w-full">
                 <img alt={prod.name} src={"src/assets/placeholder-green.png"} className="w-full h-64 bg-gray-100 object-cover" />
@@ -73,10 +83,11 @@ return <Drawer>
         </DialogTrigger>
         <DialogContent className="!max-h-full my-4 overflow-hidden px-0 py-10">
             <div className="overflow-y-scroll max-h-screen">
-                <DialogHeader className="font-semibold text-2xl mx-4">
-                    {prod.name}
-                </DialogHeader>
-                <div className="px-4 pb-2">edit</div>
+                <DialogHeader className="font-semibold text-2xl mx-4">{prod.name}</DialogHeader>
+                {isAdmin && <div className="px-4 py-2 flex flex-row gap-2">
+                    <button><Edit color="gray" className="hover:bg-gray-50 rounded" onClick={()=> onDelete(prod.id)}/></button>
+                    <button><Trash color="gray" className="hover:bg-gray-50 rounded" onClick={()=> onDelete(prod.id)}/></button>
+                </div>}
                 <img alt={prod.name} src={"src/assets/placeholder-green.png"} className="w-full h-64 bg-gray-100 object-cover" />
                 <div className="w-full h-64 bg-gray-100 object-cover">
                     <Suspense fallback={<div>Map is loading...</div>}>
