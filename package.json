@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
     "@yandex/ymaps3-clusterer": "^0.0.9",
+    "@yandex/ymaps3-types": "^0.0.27",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.408.0",
@@ -20,8 +23,8 @@
     "react-router-dom": "^6.25.1",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^3.1.0",
     "vaul": "^0.9.1",
-    "@yandex/ymaps3-types": "^0.0.27",
     "ymap3-components": "^1.1.6"
   },
   "devDependencies": {
