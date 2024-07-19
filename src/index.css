@@ -67,3 +67,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+h1 {
+  @apply font-semibold text-xl
+}
+
+h2 {
+  @apply text-lg font-semibold
+}
