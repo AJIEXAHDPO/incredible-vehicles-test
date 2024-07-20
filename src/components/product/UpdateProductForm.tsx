@@ -16,17 +16,15 @@ import { Input } from "@/components/ui/input"
 import { Product } from "./ProductCard"
 
 const formSchema = z.object({
+    //id: z.number(),
     name: z.string().min(2, {
         message: "Username must be at least 2 characters.",
     }),
     model: z.string().min(2, {
         message: "Username must be at least 2 characters.",
     }),
-    year: z.number().min(1990, {
-        message: "Too old",
-    }).max(new Date().getFullYear(), {
-        message: "Date is bigger then this year",
-    }),
+    year: z.coerce.number().gt(1900, "Too old").lt(new Date(Date.now()).getFullYear(), "Year should not be greater then now"),
+    price: z.coerce.number().gt(0),
     color: z.string().min(2, {
         message: "Color must be at least 2 characters.",
     }),
@@ -38,24 +36,20 @@ const formSchema = z.object({
     }),
 })
 
-export function UpdateeProductForm({ prod, onClose }: { prod: Product, onClose: Function}) {
+export function UpdateeProductForm({ prod, onClose, onUpdate }: { prod: Product, onClose: Function, onUpdate: Function }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: prod.name,
-            model: prod.model,
-            year: prod.year,
-            longitude: prod.longitude,
-            latitude: prod.latitude,
-            color: prod.color,
+            ...prod
         },
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        alert("Success")
-        console.log(values)
+        onUpdate(values, prod.id);
+        console.log(values);
+        onClose();
     }
 
     return (
@@ -100,7 +94,23 @@ export function UpdateeProductForm({ prod, onClose }: { prod: Product, onClose: 
                         <FormItem>
                             <FormLabel>Year</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input type="number" placeholder="shadcn" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your public display name.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Price</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="shadcn" {...field} />
                             </FormControl>
                             <FormDescription>
                                 This is your public display name.

@@ -21,7 +21,7 @@ export type Product = {
 
 export type ProductForm = Omit<Product, "id" | "longtitude" | "latitude">;
 
-export const ProductCard = ({ prod, onDelete }: { prod: Product, onDelete: Function }) => {
+export const ProductCard = ({ prod, onDelete, onUpdate }: { prod: Product, onDelete: Function, onUpdate: Function  }) => {
     const pointLocation: YMapLocation = { center: [prod.longitude, prod.latitude], zoom: 9 };
     const [isOpen, setOpen] = useState(false);
 
@@ -44,7 +44,7 @@ export const ProductCard = ({ prod, onDelete }: { prod: Product, onDelete: Funct
         <DrawerContent className="!max-h-full mt-8 overflow-hidden px-0">
             <div className="overflow-y-scroll max-h-screen">
                 <DrawerHeader className="font-semibold text-2xl">{prod.name}</DrawerHeader>
-                {isFormOpened && <UpdateeProductForm prod={prod} onClose={()=> setFormOpened(!isFormOpened)}/>}
+                {isFormOpened && <UpdateeProductForm prod={prod} onUpdate={onUpdate} onClose={()=> setFormOpened(!isFormOpened)}/>}
                 {isAdmin && <div className="px-4 py-2 flex flex-row gap-2">
                     <button><Edit color="gray" className="hover:bg-gray-50 rounded" onClick={() => setFormOpened(!isFormOpened)} /></button>
                     <button><Trash color="gray" className="hover:bg-gray-50 rounded" onClick={() => onDelete(prod.id)} /></button>
@@ -91,7 +91,7 @@ export const ProductCard = ({ prod, onDelete }: { prod: Product, onDelete: Funct
         <DialogContent className="!max-h-full my-4 overflow-hidden px-0 py-10">
             <div className="overflow-y-scroll max-h-screen">
                 <DialogHeader className="font-semibold text-2xl mx-4">{prod.name}</DialogHeader>
-                {isFormOpened && <UpdateeProductForm prod={prod} onClose={()=> setFormOpened(!isFormOpened)} />}
+                {isFormOpened && <UpdateeProductForm prod={prod} onUpdate={onUpdate} onClose={()=> setFormOpened(!isFormOpened)} />}
                 {isAdmin && <div className="px-4 py-2 flex flex-row gap-2">
                     <button><Edit color="gray" className="hover:bg-gray-50 rounded" onClick={() => setFormOpened(!isFormOpened)} /></button>
                     <button><Trash color="gray" className="hover:bg-gray-50 rounded" onClick={() => onDelete(prod.id)} /></button>
