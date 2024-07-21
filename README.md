@@ -14,4 +14,7 @@ Clone repository and get into it in terminal `cd incredible-vehicles-test`
 npm install
 npm run dev
 ```
-Open your app at port 5173
+Open your app at <a href="http://localhost:5173">localhost</a> port 5173
+
+## update from 20.07.2024 (postdeadline)
+- fix: product update option
